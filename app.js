@@ -167,22 +167,83 @@ try {
   };
 } catch (_) {}
 
-const colorNames = { primary: 'Principal', accent: 'Destaque', complementary: 'Complementar', dark: 'Fundo escuro', light: 'Fundo claro' };
-const colorPresets = ['#FFFFFF','#F5F7FA','#DCE2EA','#AEB8C7','#66758B','#26364B','#111827','#000000','#FCE4E4','#F29AA0','#E34E5D','#A51F37','#FFF0E2','#F9B77D','#F0643D','#C74B25','#FFF5C2','#F3D35C','#D7A520','#9A6A12','#E2F3E9','#91D5AA','#38A875','#176443','#DDF5F7','#86D7E1','#41B8CC','#137E94','#E3EAFE','#8DA8ED','#3153A0','#172B68','#F0E8FA','#C7A4E8','#8453B3','#582F78'];
+const colorNames = {
+  primary: 'Principal',
+  accent: 'Destaque',
+  complementary: 'Complementar',
+  dark: 'Fundo escuro',
+  light: 'Fundo claro',
+};
+const colorPresets = [
+  '#FFFFFF', '#F5F7FA', '#DCE2EA', '#AEB8C7', '#66758B', '#26364B', '#111827', '#000000',
+  '#FCE4E4', '#F29AA0', '#E34E5D', '#A51F37', '#FFF0E2', '#F9B77D', '#F0643D', '#C74B25',
+  '#FFF5C2', '#F3D35C', '#D7A520', '#9A6A12', '#E2F3E9', '#91D5AA', '#38A875', '#176443',
+  '#DDF5F7', '#86D7E1', '#41B8CC', '#137E94', '#E3EAFE', '#8DA8ED', '#3153A0', '#172B68',
+  '#F0E8FA', '#C7A4E8', '#8453B3', '#582F78',
+];
 const brandSwatches = document.querySelector('.brand-swatches');
 brandSwatches.innerHTML = Object.entries(colorNames).map(([key, label]) => `
   <article class="brand-swatch editable-swatch" data-brand-color="${key}">
     <span class="swatch-color"></span><div class="brand-swatch-content"><strong>${label}</strong>
-      <div class="color-editors"><button type="button" class="color-picker-trigger" aria-haspopup="dialog" aria-expanded="false" aria-label="Escolher ${label.toLocaleLowerCase('pt-BR')}"><span class="color-picker-preview"></span><span>Escolher cor</span><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button><code class="color-code-display" id="brand-color-${key}"></code></div>
+      <div class="color-editors">
+        <button type="button" class="color-picker-trigger" aria-haspopup="dialog" aria-expanded="false" aria-label="Escolher ${label.toLocaleLowerCase('pt-BR')}">
+          <span class="color-picker-preview"></span><span>Escolher cor</span>
+          <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <code class="color-code-display" id="brand-color-${key}"></code>
+      </div>
     </div>
-    <div class="color-picker-popover" role="dialog" aria-label="Escolher ${label.toLocaleLowerCase('pt-BR')}" hidden><div class="color-popover-heading"><span class="color-popover-preview"></span><div><strong>Escolha uma cor</strong><small>${label}</small></div><button type="button" class="color-popover-close" aria-label="Fechar seletor">×</button></div><label class="color-code-label" for="brand-color-${key}-hex">Código HEX</label><input class="color-popover-code" id="brand-color-${key}-hex" value="${brandIdentity.colors[key]}" maxlength="7" spellcheck="false" autocomplete="off"><div class="color-preset-grid" aria-label="Cores sugeridas">${colorPresets.map((color) => `<button type="button" class="color-preset" data-color="${color}" style="--preset-color:${color}" aria-label="${color}" title="${color}"></button>`).join('')}</div><div class="color-picker-actions"><button type="button" class="color-picker-cancel">Cancelar</button><button type="button" class="color-picker-apply">Aplicar cor</button></div></div>
+    <div class="color-picker-popover" role="dialog" aria-label="Escolher ${label.toLocaleLowerCase('pt-BR')}" hidden>
+      <div class="color-popover-heading">
+        <span class="color-popover-preview"></span>
+        <div><strong>Escolha uma cor</strong><small>${label}</small></div>
+        <button type="button" class="color-popover-close" aria-label="Fechar seletor">×</button>
+      </div>
+      <label class="color-code-label" for="brand-color-${key}-hex">Código HEX</label>
+      <input class="color-popover-code" id="brand-color-${key}-hex" value="${brandIdentity.colors[key]}" maxlength="7" spellcheck="false" autocomplete="off">
+      <div class="color-preset-grid" aria-label="Cores sugeridas">
+        ${colorPresets.map((color) => `<button type="button" class="color-preset" data-color="${color}" style="--preset-color:${color}" aria-label="${color}" title="${color}"></button>`).join('')}
+      </div>
+      <div class="color-picker-actions">
+        <button type="button" class="color-picker-cancel">Cancelar</button>
+        <button type="button" class="color-picker-apply">Aplicar cor</button>
+      </div>
+    </div>
   </article>`).join('');
 brandSwatches.insertAdjacentHTML('afterend', '<small class="brand-save-hint">Alterações salvas neste navegador.</small>');
 
 const typeSamples = document.querySelector('.type-samples');
 typeSamples.insertAdjacentHTML('beforebegin', `<div class="font-controls">
-  <div class="font-field"><label for="brand-heading-font">Títulos</label><div class="font-input-shell"><input id="brand-heading-font" autocomplete="off" placeholder="Digite uma fonte"><button type="button" class="font-picker" aria-label="Escolher fonte para títulos" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button></div><div class="font-options" hidden><button type="button">Inter</button><button type="button">DM Sans</button><button type="button">Arial</button><button type="button">Segoe UI</button><button type="button">Georgia</button><button type="button">Verdana</button><button type="button">system-ui</button></div></div>
-  <div class="font-field"><label for="brand-body-font">Textos</label><div class="font-input-shell"><input id="brand-body-font" autocomplete="off" placeholder="Digite uma fonte"><button type="button" class="font-picker" aria-label="Escolher fonte para textos" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button></div><div class="font-options" hidden><button type="button">Inter</button><button type="button">DM Sans</button><button type="button">Arial</button><button type="button">Segoe UI</button><button type="button">Georgia</button><button type="button">Verdana</button><button type="button">system-ui</button></div></div>
+  <div class="font-field">
+    <label for="brand-heading-font">Títulos</label>
+    <div class="font-input-shell">
+      <input id="brand-heading-font" autocomplete="off" placeholder="Digite uma fonte">
+      <button type="button" class="font-picker" aria-label="Escolher fonte para títulos" aria-expanded="false">
+        <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+    </div>
+    <div class="font-options" hidden>
+      <button type="button">Inter</button><button type="button">DM Sans</button>
+      <button type="button">Arial</button><button type="button">Segoe UI</button>
+      <button type="button">Georgia</button><button type="button">Verdana</button>
+      <button type="button">system-ui</button>
+    </div>
+  </div>
+  <div class="font-field">
+    <label for="brand-body-font">Textos</label>
+    <div class="font-input-shell">
+      <input id="brand-body-font" autocomplete="off" placeholder="Digite uma fonte">
+      <button type="button" class="font-picker" aria-label="Escolher fonte para textos" aria-expanded="false">
+        <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+    </div>
+    <div class="font-options" hidden>
+      <button type="button">Inter</button><button type="button">DM Sans</button>
+      <button type="button">Arial</button><button type="button">Segoe UI</button>
+      <button type="button">Georgia</button><button type="button">Verdana</button>
+      <button type="button">system-ui</button>
+    </div>
+  </div>
 </div>`);
 typeSamples.querySelector('article:first-child>small').id = 'brand-heading-sample-label';
 typeSamples.querySelector('article:first-child>strong').id = 'brand-heading-sample';
@@ -199,7 +260,22 @@ const assetGroups = [
   { key: 'image-other', label: 'Outras referências', hint: 'Imagens adicionais', accept: 'image/png,image/jpeg,image/webp' },
 ];
 function folderMarkup(group) {
-  return `<article class="asset-folder"><div class="asset-folder-head"><span class="folder-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg></span><div><strong>${group.label}</strong><small>${group.hint}</small></div><label class="upload-button">Enviar<input class="brand-asset-input" type="file" data-folder="${group.key}" accept="${group.accept}" multiple></label></div><div class="uploaded-assets" id="assets-${group.key}"><p class="empty-folder">Nenhum arquivo nesta pasta.</p></div></article>`;
+  return `
+    <article class="asset-folder">
+      <div class="asset-folder-head">
+        <span class="folder-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>
+        </span>
+        <div><strong>${group.label}</strong><small>${group.hint}</small></div>
+        <label class="upload-button">
+          Enviar
+          <input class="brand-asset-input" type="file" data-folder="${group.key}" accept="${group.accept}" multiple>
+        </label>
+      </div>
+      <div class="uploaded-assets" id="assets-${group.key}">
+        <p class="empty-folder">Nenhum arquivo nesta pasta.</p>
+      </div>
+    </article>`;
 }
 document.querySelector('.logo-variants').outerHTML = `<div class="asset-folder-grid logo-folder-grid">${assetGroups.slice(0, 3).map(folderMarkup).join('')}</div>`;
 document.querySelector('.image-reference-grid').insertAdjacentHTML('afterend', `<div class="asset-folder-grid image-folder-grid">${assetGroups.slice(3).map(folderMarkup).join('')}</div>`);
@@ -669,15 +745,78 @@ const calendarOpenButton = document.querySelector('#content-calendar-open');
 const calendarEventDetail = document.querySelector('#calendar-event-detail');
 let visibleCalendarMonth = new Date(2026, 11, 1);
 const contentCalendarEvents = {
-  '2026-12-03': [{ title: 'Briefing finalizado', type: 'production', time: '16h', project: 'Campanha de exemplo', status: 'Concluído', description: 'Briefing revisado com a equipe. Conceito, referências e entregas do mês definidos.' }],
-  '2026-12-08': [{ title: 'Roteiro · Campanha de exemplo', type: 'production', time: '10h', project: 'Campanha de exemplo', status: 'Em produção', description: 'A equipe está preparando o roteiro dos vídeos da campanha para sua revisão.' }],
-  '2026-12-12': [{ title: 'Gravação do vídeo 01', type: 'production', time: '9h30', project: 'Campanha de exemplo', status: 'Agendado', description: 'Gravação do primeiro vídeo com base no roteiro aprovado.' }],
-  '2026-12-18': [{ title: 'Entrega para aprovação', type: 'approval', time: 'Até 18h', project: 'Campanha de exemplo', status: 'Aguardando envio', description: 'Previsão de entrega da primeira versão para comentários e aprovação.' }],
-  '2026-12-22': [{ title: 'Revisão com a equipe', type: 'approval', time: '14h', project: 'Campanha de exemplo', status: 'Programado', description: 'Reunião para revisar os ajustes solicitados e alinhar os próximos passos.' }],
-  '2027-01-05': [{ title: 'Publicação · Vídeo 01', type: 'publication', time: '12h', project: 'Campanha de exemplo', status: 'Programado', description: 'Publicação do primeiro conteúdo aprovado nos canais da campanha.' }],
-  '2027-01-12': [{ title: 'Vídeo 02 · Conteúdo de marca', type: 'production', time: '10h', project: 'Conteúdo de marca', status: 'Em produção', description: 'Captação e edição do segundo vídeo para a sequência de conteúdo da marca.' }],
-  '2027-01-19': [{ title: 'Aprovação dos cortes', type: 'approval', time: 'Até 17h', project: 'Conteúdo de marca', status: 'Aguardando aprovação', description: 'Prazo para revisar os cortes, deixar comentários e aprovar a versão final.' }],
-  '2027-01-26': [{ title: 'Entrega dos arquivos finais', type: 'production', time: 'Até 18h', project: 'Conteúdo de marca', status: 'Programado', description: 'Entrega dos arquivos finais aprovados, organizados para publicação.' }],
+  '2026-12-03': [{
+    title: 'Briefing finalizado',
+    type: 'production',
+    time: '16h',
+    project: 'Campanha de exemplo',
+    status: 'Concluído',
+    description: 'Briefing revisado com a equipe. Conceito, referências e entregas do mês definidos.',
+  }],
+  '2026-12-08': [{
+    title: 'Roteiro · Campanha de exemplo',
+    type: 'production',
+    time: '10h',
+    project: 'Campanha de exemplo',
+    status: 'Em produção',
+    description: 'A equipe está preparando o roteiro dos vídeos da campanha para sua revisão.',
+  }],
+  '2026-12-12': [{
+    title: 'Gravação do vídeo 01',
+    type: 'production',
+    time: '9h30',
+    project: 'Campanha de exemplo',
+    status: 'Agendado',
+    description: 'Gravação do primeiro vídeo com base no roteiro aprovado.',
+  }],
+  '2026-12-18': [{
+    title: 'Entrega para aprovação',
+    type: 'approval',
+    time: 'Até 18h',
+    project: 'Campanha de exemplo',
+    status: 'Aguardando envio',
+    description: 'Previsão de entrega da primeira versão para comentários e aprovação.',
+  }],
+  '2026-12-22': [{
+    title: 'Revisão com a equipe',
+    type: 'approval',
+    time: '14h',
+    project: 'Campanha de exemplo',
+    status: 'Programado',
+    description: 'Reunião para revisar os ajustes solicitados e alinhar os próximos passos.',
+  }],
+  '2027-01-05': [{
+    title: 'Publicação · Vídeo 01',
+    type: 'publication',
+    time: '12h',
+    project: 'Campanha de exemplo',
+    status: 'Programado',
+    description: 'Publicação do primeiro conteúdo aprovado nos canais da campanha.',
+  }],
+  '2027-01-12': [{
+    title: 'Vídeo 02 · Conteúdo de marca',
+    type: 'production',
+    time: '10h',
+    project: 'Conteúdo de marca',
+    status: 'Em produção',
+    description: 'Captação e edição do segundo vídeo para a sequência de conteúdo da marca.',
+  }],
+  '2027-01-19': [{
+    title: 'Aprovação dos cortes',
+    type: 'approval',
+    time: 'Até 17h',
+    project: 'Conteúdo de marca',
+    status: 'Aguardando aprovação',
+    description: 'Prazo para revisar os cortes, deixar comentários e aprovar a versão final.',
+  }],
+  '2027-01-26': [{
+    title: 'Entrega dos arquivos finais',
+    type: 'production',
+    time: 'Até 18h',
+    project: 'Conteúdo de marca',
+    status: 'Programado',
+    description: 'Entrega dos arquivos finais aprovados, organizados para publicação.',
+  }],
 };
 
 function calendarDateKey(date) {
@@ -772,7 +911,8 @@ document.querySelector('#calendar-today').addEventListener('click', () => {
 });
 
 document.querySelectorAll('.resolve-button').forEach((button) => button.addEventListener('click', () => showToast('Resposta registrada nesta prévia.')));
-document.querySelectorAll('.extra-card button:not(#content-calendar-open):not(#brand-kit-open)').forEach((button) => button.addEventListener('click', () => showToast('Material disponível nesta prévia local.')));
+document.querySelectorAll('.extra-card button:not(#content-calendar-open):not(#brand-kit-open)')
+  .forEach((button) => button.addEventListener('click', () => showToast('Material disponível nesta prévia local.')));
 document.querySelectorAll('.campaign-card,.hero-side').forEach((card) => card.addEventListener('click', () => {
   switchView('approvals', 'Aprovações');
 }));
